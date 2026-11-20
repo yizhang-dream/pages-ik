@@ -1,0 +1,638 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>核心源码对照 · 数字人课程</title><style>
+:root{--ink:#1e2d38;--muted:#657477;--bg:#f5f4ef;--paper:#fffefa;--line:#d9dfd6;--accent:#256854;--soft:#e9f1e7;--warn:#b05a31;--blue:#447faf}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;font-size:16px;line-height:1.85}a{color:var(--accent);text-underline-offset:4px}button,input,select,textarea{font:inherit}button,.button{cursor:pointer;border:1px solid var(--line);border-radius:7px;padding:8px 13px;background:var(--paper);color:var(--ink);text-decoration:none;font-size:14px}button:hover,.button:hover{border-color:var(--accent);background:var(--soft)}button:disabled{opacity:.4;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #80aa94;outline-offset:3px}.skip{position:absolute;left:16px;top:-70px;background:var(--paper);padding:8px;z-index:5}.skip:focus{top:4px}.top{border-bottom:1px solid var(--line);background:var(--paper)}.top-inner{max-width:1460px;margin:auto;padding:17px 30px;display:flex;gap:22px;align-items:center;justify-content:space-between}.brand{font-weight:700;color:var(--accent)}.top small{color:var(--muted);font-size:12px}.shell{display:grid;grid-template-columns:180px minmax(0,1fr);gap:34px;max-width:1460px;padding:30px;margin:auto}.rail{position:sticky;top:22px;align-self:start;max-height:calc(100dvh - 44px);overflow:auto}.rail-title{font-size:12px;color:var(--muted);margin:0 0 12px}.lesson-nav{display:grid;gap:5px}.lesson-nav button{text-align:left;border-color:transparent;background:transparent;font-size:14px;padding:8px 10px}.lesson-nav button[aria-current=step]{background:var(--soft);color:var(--accent);border-color:var(--line)}.nav-num{color:var(--muted);margin-right:9px;font-size:12px}.rail-note{border-top:1px solid var(--line);margin-top:22px;padding-top:15px;font-size:12px;color:var(--muted)}.chapter-links{display:grid;gap:8px;margin-top:17px;font-size:13px}.workspace{min-width:0}.chapter-label{color:var(--accent);font-size:13px;margin:0 0 10px}.lesson-header h1{font-size:32px;line-height:1.45;margin:0 0 13px;letter-spacing:-.4px}.lead{color:var(--muted);font-size:17px;max-width:850px;margin:0 0 25px}.learning-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);gap:30px;align-items:start}.copy{min-width:0}.copy h2{font-size:20px;margin:28px 0 10px;line-height:1.6}.copy h2:first-child{margin-top:0}.copy p{margin:12px 0}.equation{background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--accent);padding:13px 15px;border-radius:6px;margin:17px 0;font-family:"Cambria Math","Microsoft YaHei",serif;overflow-wrap:anywhere;line-height:1.9}.worked,.callout{border-left:3px solid var(--accent);padding:13px 17px;margin:20px 0;background:var(--soft);border-radius:0 7px 7px 0}.callout{font-size:14px}.worked strong{font-size:13px;color:var(--accent)}pre{font-size:13px;line-height:1.8;background:#edf0e8;border-radius:7px;padding:15px;overflow:auto;max-width:100%;tab-size:4}code{font-size:.87em;font-family:Consolas,monospace;overflow-wrap:anywhere}pre code{font-size:inherit;overflow-wrap:normal}table{width:100%;border-collapse:collapse;font-size:14px;margin:20px 0;overflow-wrap:anywhere}th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);padding:10px 9px}th{color:var(--accent);background:var(--soft)}ol,ul{padding-left:25px}li{margin:8px 0}.lab{position:sticky;top:20px;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:19px;min-width:0;max-height:calc(100dvh - 40px);overflow:auto}.lab h2{font-size:16px;margin:0 0 8px}.lab-note{font-size:12px;color:var(--muted);line-height:1.75;margin:10px 0}.graph{width:100%;aspect-ratio:500/360;display:block;background:#f6f7f2;border:1px solid var(--line);border-radius:8px}.graph text{font-family:"Microsoft YaHei",sans-serif;font-size:13px;fill:var(--muted)}.graph .grid{stroke:#dfe5dc;stroke-width:1}.graph .axis{stroke:#a2b4a8;stroke-width:1}.graph .reference{fill:none;stroke:#97a59d;stroke-width:2;stroke-dasharray:4 4}.graph .bone{stroke:var(--blue);stroke-width:4;stroke-linecap:round;fill:none}.graph .bad{stroke:var(--warn)}.graph .joint{fill:var(--paper);stroke:var(--blue);stroke-width:2}.graph .root{fill:var(--accent);stroke:var(--accent)}.graph .target{stroke:var(--warn);stroke-width:2.5;fill:none}.graph .root-anchor{stroke:var(--accent);stroke-width:1.5;fill:none}.controls{display:grid;gap:11px;margin-top:15px}.controls label{display:block;font-size:13px}.controls select{display:block;width:100%;font-size:13px;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink)}input[type=range]{width:100%;accent-color:var(--accent)}.step-tools{display:flex;gap:7px;flex-wrap:wrap}.step-tools button{font-size:12px;padding:6px 10px}.readout{margin:15px 0 0;font-size:13px;font-variant-numeric:tabular-nums;line-height:1.9}.readout strong{color:var(--accent)}.readout dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px}.readout dt,.readout dd{margin:0}.readout dd{text-align:right}.parameters{font-family:Consolas,"Microsoft YaHei",monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);padding:12px;border-radius:6px;font-size:12px;line-height:1.7}.legend{display:flex;gap:15px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:8px 0}.line-key{display:inline-block;width:19px;height:3px;vertical-align:middle;margin-right:5px;background:var(--blue)}.line-key.gray{background:#97a59d}.line-key.orange{background:var(--warn)}.error-chart{width:100%;height:100px;background:var(--bg);border-radius:6px;margin-top:10px}.exercise{max-width:900px;margin-top:30px;border-top:1px solid var(--line);padding-top:20px}.exercise h2{font-size:19px;margin:0 0 12px}.exercise label{display:block;margin-bottom:10px}.exercise textarea{display:block;width:100%;min-height:140px;resize:vertical;padding:13px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.8}.save-status{font-size:12px;color:var(--muted);min-height:26px}.answer{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 15px;margin:12px 0}.answer summary{cursor:pointer;color:var(--accent);font-size:14px}.answer p{font-size:15px}.notebook-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.bottom-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;margin-top:30px}.counter{font-size:13px;color:var(--muted)}.footer{display:flex;gap:17px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:27px 0}.hub{max-width:1160px;margin:auto;padding:38px 30px}.hub h1{font-size:36px;line-height:1.4;max-width:750px}.hub h2{font-size:22px;margin-top:35px}.chapter-list{display:grid;gap:13px}.chapter-card{display:grid;grid-template-columns:70px minmax(0,1fr) 110px;align-items:start;gap:18px;border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:20px;text-decoration:none}.chapter-card .num{font-size:28px;font-family:Georgia,serif;color:var(--muted)}.chapter-card h3{font-size:19px;margin:0 0 8px}.chapter-card p{color:var(--muted);font-size:14px;margin:0}.chapter-card .read{font-size:13px;color:var(--accent);padding-top:8px}.hub-columns{display:grid;grid-template-columns:1fr 1fr;gap:25px}.glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.glossary details{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:10px 14px}.glossary summary{cursor:pointer;color:var(--accent);font-size:14px}.glossary p{font-size:14px;margin:12px 0}.glossary-filter{width:100%;max-width:440px;padding:11px;border:1px solid var(--line);border-radius:6px;background:var(--paper)}.hub-note{font-size:14px;color:var(--muted)}[hidden]{display:none!important}
+@media(max-width:1150px){.learning-grid{grid-template-columns:minmax(0,1fr)}.lab{position:static;max-height:none;max-width:690px;width:100%}.shell{gap:25px;padding:25px;grid-template-columns:160px minmax(0,1fr)}}@media(max-width:700px){body{font-size:15px}.top-inner{padding:15px 18px}.top small{display:none}.shell{display:block;padding:22px 18px}.rail{position:static;max-height:none;margin-bottom:20px;overflow:visible}.rail-title,.rail-note{display:none}.lesson-nav{display:flex;overflow:auto;padding:2px 0 8px}.lesson-nav button{white-space:nowrap;padding:7px}.chapter-links{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0}.lesson-header h1{font-size:27px}.lead{font-size:16px}.learning-grid{gap:20px}.lab{padding:14px}.copy h2{font-size:19px}.hub{padding:28px 18px}.hub h1{font-size:29px}.chapter-card{grid-template-columns:38px minmax(0,1fr);gap:12px;padding:16px}.chapter-card .num{font-size:23px}.chapter-card .read{grid-column:2}.hub-columns,.glossary{grid-template-columns:1fr}table{font-size:12px}th,td{padding:8px 5px}.notebook-tools{gap:8px}}@media print{.top,.rail,.controls,.notebook-tools,.bottom-nav,.skip{display:none}.shell,.learning-grid{display:block;padding:0}.lab{position:static;max-height:none;max-width:450px;break-inside:avoid;margin:20px 0}.exercise textarea{min-height:100px}.answer{break-inside:avoid}body{background:#fff}.hub{padding:0}.chapter-card{break-inside:avoid}}
+
+@media(max-width:1150px){.learning-grid{display:flex;flex-direction:column;gap:0}.copy{display:contents}.depth-track{order:2;margin-top:28px;width:100%;min-width:0}.lab{order:1}}@media print{.learning-grid{display:block}.copy{display:block}.depth-track{margin-top:0}}
+.lesson-header h1,.lesson-header .lead{white-space:pre-line}
+.learning-order{background:#e9f3ed;border:1px solid #cbded2;border-radius:8px;padding:15px 18px;margin:0 0 22px;font-size:14px}
+.learning-order p{margin:6px 0}.learning-order a{font-weight:600}
+.parallel-copy{display:grid;gap:24px}.parallel-copy>section{min-width:0}
+.language-heading{font-size:12px;letter-spacing:.05em;color:#17624f;border-bottom:1px solid #d7dfda;padding-bottom:8px;margin-bottom:16px}
+.english-copy{background:#fff;padding:18px;border:1px solid #d7dfda;border-radius:8px;line-height:1.85;overflow-wrap:anywhere}
+.english-copy h2,.english-copy h3{line-height:1.5}.english-copy p{margin:12px 0}
+.english-copy .equation{font-family:'Cambria Math','Segoe UI',serif}
+.copy{container-type:inline-size}@container(min-width:650px){.parallel-copy{grid-template-columns:1fr 1fr;align-items:start}}
+.english-label{display:block;color:#546762;font-size:.88em;margin-top:5px}
+.pole-foundation{padding:18px;border:1px solid #cbded2;border-radius:8px;background:#e9f3ed;margin:18px 0}
+.hint-circle{fill:none;stroke:#8b9c90;stroke-width:1.5;stroke-dasharray:4 4}.hint-direction{stroke:#a66b28;stroke-width:2}
+.lesson-route{font-size:14px;margin-top:24px;padding-top:14px;border-top:1px solid #d7dfda}
+.revision-card{border:1px solid #cbded2;background:#e9f3ed;padding:18px;border-radius:9px;margin:22px 0}
+@media print{.english-copy{break-inside:auto}}
+</style></head><body><main class="hub"><section class="revision-card"><p lang="zh-CN">辅助资料：正文课程已提供中英双语。本页保存当前源码或示例检查记录；代码标识符与原始结果不作改写。先读概念与推导，再用本页逐项对照。</p><p lang="en">Supporting material: the lessons now include Chinese and English explanations. This page retains source excerpts or verification records; identifiers and original numerical results remain unchanged. Learn the concepts and derivations first, then compare them with these records.</p></section><a href="learn.html">← 全部课程</a><h1>把公式对照到实际函数</h1><p class="lead">以下内容从当前 Python 文件原样摘录，并保留行号。阅读注释时仍要核对循环的实际顺序：逐点更新未处理的相邻段可能暂时失真；“硬约束”应在完整扫描和最终结果中检查。</p><p>这些是课程生成时的源码快照；后续修改实现后需要重新生成。<code>ShapeIK</code> 当前最终恢复使用最短弧，广义 Helix 当前使用一维二分与数值积分。</p><details id="fabrik" class="answer"><summary>src/dhik/solvers/fabrik.py · FABRIK._iterate · 第 272 行</summary><pre><code> 272      @staticmethod
+ 273      def _iterate(
+ 274          positions: np.ndarray,
+ 275          base: np.ndarray,
+ 276          target: np.ndarray,
+ 277          bones: np.ndarray,
+ 278          rest_directions: np.ndarray,
+ 279          max_iterations: int,
+ 280          tolerance: float,
+ 281      ) -&gt; tuple:
+ 282          &quot;&quot;&quot;执行 FABRIK 前后向迭代，返回 ``(实际迭代次数, 是否收敛)``。
+ 283  
+ 284          ``positions`` 会被**原地更新**。每一步都严格把每段投影回 ``bones`` 给定的长度，
+ 285          因此任意中间状态都不改变骨长；段方向未定义时用该段的静止骨向兜底。
+ 286          &quot;&quot;&quot;
+ 287          num_bones = int(bones.shape[0])
+ 288          reached = False
+ 289          iterations = 0
+ 290          for iteration in range(1, max_iterations + 1):
+ 291              iterations = iteration
+ 292              # 前向：末端拉到目标，再从末端往根部投影。
+ 293              positions[num_bones] = target
+ 294              for step in range(num_bones - 1, -1, -1):
+ 295                  segment = positions[step] - positions[step + 1]
+ 296                  unit = _unit_or_fallback(segment, rest_directions[step])
+ 297                  positions[step] = positions[step + 1] + unit * bones[step]
+ 298              # 后向：根部复位，再从根部往末端投影。
+ 299              positions[0] = base
+ 300              for step in range(1, num_bones + 1):
+ 301                  segment = positions[step] - positions[step - 1]
+ 302                  unit = _unit_or_fallback(segment, rest_directions[step - 1])
+ 303                  positions[step] = positions[step - 1] + unit * bones[step - 1]
+ 304              if float(np.linalg.norm(positions[num_bones] - target)) &lt;= tolerance:
+ 305                  reached = True
+ 306                  break
+ 307          return iterations, reached
+</code></pre></details><details id="shape" class="answer"><summary>src/dhik/solvers/shape.py · ShapeIK.solve · 第 228 行</summary><pre><code> 228      def solve(
+ 229          self,
+ 230          skeleton: Skeleton,
+ 231          target: np.ndarray,
+ 232          pole: Optional[np.ndarray] = None,
+ 233          end_effector: Optional[JointRef] = None,
+ 234          root_transform: Optional[Transform] = None,
+ 235          parameters: Optional[SolverParameters] = None,
+ 236      ) -&gt; SolveResult:
+ 237          &quot;&quot;&quot;见 :meth:`IKSolver.solve`。
+ 238  
+ 239          与其它求解器的差异：除了末端位置，本求解器还决定整条链的**形状**
+ 240          （由 ``family`` 选形状族、``pole`` 选弯曲平面与弯曲侧、``α`` 由端点和
+ 241          骨长自动解出）。不可达 / 退化 / 未收敛都通过 ``status`` 报告。
+ 242          &quot;&quot;&quot;
+ 243          start = self.stopwatch_start()
+ 244          values = self.resolve_parameters(parameters)
+ 245          index, point, pole_vector = self.validate_common_inputs(skeleton, target, pole, end_effector)
+ 246          try:
+ 247              spec = _SolverSpec.from_parameters(values)
+ 248          except _ParameterError as error:
+ 249              return self.build_failure_result(
+ 250                  skeleton,
+ 251                  point,
+ 252                  SolveStatus.INVALID_INPUT,
+ 253                  message=str(error),
+ 254                  root_transform=root_transform,
+ 255                  end_effector=index,
+ 256              )
+ 257  
+ 258          chain = skeleton.ancestors(index)
+ 259          num_bones = len(chain) - 1
+ 260          if num_bones &lt; 1:
+ 261              raise ValueError(
+ 262                  &quot;ShapeIK 需要至少 1 段骨的骨链，但末端就是骨架根关节（没有可驱动的骨）；&quot;
+ 263                  f&quot;请指定 root 之外的末端关节，当前末端为 {skeleton.joint_names[index]!r}。&quot;
+ 264              )
+ 265          bones = np.array([skeleton.bone_length(chain[j]) for j in range(1, len(chain))], dtype=np.float64)
+ 266          total_length = float(bones.sum())
+ 267          radius_min, radius_max = reachable_bounds(skeleton, index)
+ 268  
+ 269          root = Transform.identity() if root_transform is None else root_transform
+ 270          base = root.apply(skeleton.rest_position_of(chain[0]))
+ 271          offset = point - base
+ 272          distance = float(np.linalg.norm(offset))
+ 273          scale = max(1.0, total_length)
+ 274          # 弦方向：端点重合时方向未定义，用确定性垂直方向兜底（不产生 NaN）。
+ 275          chord_hat = (
+ 276              offset / distance if distance &gt; _DIRECTION_EPS else orthogonal_unit_vector(np.zeros(3))
+ 277          )
+ 278          bend, bend_note = _bend_direction(chord_hat, pole_vector, 1e-9 * scale)
+ 279          # 形状族在拿到弯曲方向之后才构造：plane_hint 就是&quot;曲线朝哪侧凸出&quot;，
+ 280          # 于是换 pole 就换弯曲平面/弯曲侧（形状参数 α 与平面无关，见 shapes.py 约定）。
+ 281          family = spec.build_family(bend)
+ 282          classification = classify_target(skeleton, point, end_effector=index, root_transform=root)
+ 283  
+ 284          messages: List[str] = []
+ 285          if bend_note:
+ 286              messages.append(bend_note)
+ 287          if classification is Reachability.NEAR_STRAIGHT:
+ 288              messages.append(&quot;目标位于外边界邻域（近完全伸直），按可达处理但形状参数已逼近奇异&quot;)
+ 289          elif classification is Reachability.NEAR_FOLDED:
+ 290              messages.append(&quot;目标位于内边界邻域（近完全折叠），按可达处理但形状参数已逼近奇异&quot;)
+ 291  
+ 292          # --- 形状参数求解 + 等弧长采样初始化 --------------------------------- #
+ 293          parameter: Optional[Any] = None
+ 294          initial: Optional[np.ndarray] = None
+ 295          degenerate: Optional[ShapeDegenerateError] = None
+ 296          try:
+ 297              parameter = family.solve_parameter(
+ 298                  chord=distance, total_length=total_length, lengths=bones, **spec.control
+ 299              )
+ 300              cumulative = np.concatenate(([0.0], np.cumsum(bones)))
+ 301              initial, polyline = _shape_sampling(family, base, point, parameter, cumulative)
+ 302          except ShapeDegenerateError as error:
+ 303              degenerate = error
+ 304          else:
+ 305              bulge = _max_bulge(initial, base, chord_hat)
+ 306              limit = _MIN_SHAPE_BULGE_RATIO * scale
+ 307              if bulge &lt;= limit:
+ 308                  degenerate = ShapeDegenerateError(
+ 309                      f&quot;形状参数 {family.parameter_to_metadata(parameter)!r} 解出的曲线与弦的最大垂距 &quot;
+ 310                      f&quot;{bulge:.3e} ≤ {limit:.3e}（浮点精度下不可分辨，曲线已退化成直线）&quot;,
+ 311                      &quot;减小形状控制量（正弦族可减小波数 k）或改用其它形状族&quot;,
+ 312                  )
+ 313  
+ 314          # --- 离散骨长修正（硬约束）+ 关节旋转恢复 ---------------------------- #
+ 315          correction: Optional[CorrectionResult] = None
+ 316          fallback: Optional[str] = None
+ 317          initial_residual: Optional[float] = None
+ 318          if degenerate is None:
+ 319              assert parameter is not None and initial is not None  # 非退化分支必然已解出参数与采样
+ 320              initial_residual = _max_segment_residual(initial, bones)
+ 321              projector = _CurveProjector(polyline)
+ 322              correction = correct_to_bone_lengths(
+ 323                  points=initial,
+ 324                  lengths=bones,
+ 325                  A=base,
+ 326                  B=point,
+ 327                  max_iter=spec.max_iterations,
+ 328                  tol=spec.tolerance,
+ 329                  shape_projector=projector,
+ 330                  attraction=spec.attraction,
+ 331              )
+ 332              points = correction.points
+ 333              iterations = correction.iterations
+ 334              status = SolveStatus.SUCCESS if correction.converged else SolveStatus.MAX_ITERATIONS
+ 335              if not correction.converged:
+ 336                  messages.append(
+ 337                      f&quot;修正器在 {correction.iterations} 轮内未收敛到容差 {spec.tolerance:.3g}&quot;
+ 338                      f&quot;（端点偏移 {correction.endpoint_error:.3e}、段长残差 &quot;
+ 339                      f&quot;{correction.max_segment_residual:.3e}）&quot;
+ 340                  )
+ 341          else:
+ 342              messages.append(f&quot;形状参数退化：{degenerate.reason}；建议回退：{degenerate.fallback_hint}&quot;)
+ 343              points, iterations, status, fallback, correction, initial_residual = _fallback_configuration(
+ 344                  classification=classification,
+ 345                  base=base,
+ 346                  point=point,
+ 347                  chord_hat=chord_hat,
+ 348                  bones=bones,
+ 349                  bend=bend,
+ 350                  spec=spec,
+ 351              )
+ 352              if fallback == &quot;straight&quot;:
+ 353                  messages.append(&quot;已回退为沿弦方向的伸直姿态（骨长仍严格保持）&quot;)
+ 354              elif fallback == &quot;folded&quot;:
+ 355                  messages.append(&quot;已回退为折叠极限姿态（最长骨朝目标方向、其余骨折回，末端落在最小可达半径上）&quot;)
+ 356              else:
+ 357                  messages.append(&quot;已放松形状先验为直线并求可行姿态（骨长仍严格保持）&quot;)
+ 358  
+ 359          local_rotations = self.recover_local_rotations(skeleton, chain, points, root)
+ 360          metadata = _build_metadata(
+ 361              spec=spec,
+ 362              family=family,
+ 363              classification=classification,
+ 364              parameter=parameter,
+ 365              num_bones=num_bones,
+ 366              bones=bones,
+ 367              total_length=total_length,
+ 368              radius_min=radius_min,
+ 369              radius_max=radius_max,
+ 370              distance=distance,
+ 371              bend=bend,
+ 372              pole_vector=pole_vector,
+ 373              points=points,
+ 374              base=base,
+ 375              point=point,
+ 376              chord_hat=chord_hat,
+ 377              correction=correction,
+ 378              initial_residual=initial_residual,
+ 379              degenerate=degenerate,
+ 380              fallback=fallback,
+ 381          )
+ 382          elapsed = self.stopwatch_elapsed(start)
+ 383          return self.build_result(
+ 384              skeleton=skeleton,
+ 385              local_rotations=local_rotations,
+ 386              target=point,
+ 387              status=status,
+ 388              iterations=iterations,
+ 389              elapsed_time=elapsed,
+ 390              root_transform=root,
+ 391              end_effector=index,
+ 392              message=&quot;；&quot;.join(messages),
+ 393              metadata=metadata,
+ 394          )
+</code></pre></details><details id="arc" class="answer"><summary>src/dhik/shapes.py · ArcShape.solve_parameter · 第 615 行</summary><pre><code> 615      def solve_parameter(self, chord: float, total_length: float, **control: Any) -&gt; float:
+ 616          &quot;&quot;&quot;解圆心角 ``θ``：见类文档的单调性与二分区间说明。&quot;&quot;&quot;
+ 617          distance, total = self._validate_inputs(chord, total_length, dict(control))
+ 618          ratio = total / distance
+ 619          upper = float(np.pi) * (1.0 - 1e-12)
+ 620          if _arc_length_ratio(upper) &lt; ratio:
+ 621              raise ShapeDegenerateError(
+ 622                  f&quot;圆心角需要逼近 2π 才能满足 S/d = {ratio:.6g}（超过可表示范围 ~1e12）&quot;,
+ 623                  &quot;回退为多圈形状或退化为接近闭合的圆环姿态&quot;,
+ 624              )
+ 625          half_angle = _bisect_increasing(_arc_length_ratio, 0.0, upper, ratio)
+ 626          return 2.0 * half_angle
+</code></pre></details><details id="catenary" class="answer"><summary>src/dhik/shapes.py · CatenaryShape.solve_parameter · 第 713 行</summary><pre><code> 713      def solve_parameter(self, chord: float, total_length: float, **control: Any) -&gt; float:
+ 714          &quot;&quot;&quot;解 ``u = d/(2a)`` 后返回 ``a = d/(2u)``：见类文档的单调性与二分区间说明。&quot;&quot;&quot;
+ 715          distance, total = self._validate_inputs(chord, total_length, dict(control))
+ 716          ratio = total / distance
+ 717          upper = 1.0
+ 718          while _catenary_length_ratio(upper) &lt; ratio:
+ 719              upper *= 2.0
+ 720              if upper &gt; 700.0:
+ 721                  raise ShapeDegenerateError(
+ 722                      f&quot;悬链线需要 u = d/(2a) &gt; 700 才能满足 S/d = {ratio:.6g}（sinh 溢出）&quot;,
+ 723                      &quot;回退为沿弦方向的伸直姿态，或改用圆弧/正弦族表达极端弯曲&quot;,
+ 724                  )
+ 725          u = _bisect_increasing(_catenary_length_ratio, 0.0, upper, ratio)
+ 726          return distance / (2.0 * u)
+</code></pre></details><details id="sinusoid" class="answer"><summary>src/dhik/shapes.py · SinusoidShape._points_at_fractions · 第 874 行</summary><pre><code> 874      def _points_at_fractions(
+ 875          self,
+ 876          A: np.ndarray,
+ 877          B: np.ndarray,
+ 878          parameter: float,
+ 879          fractions: np.ndarray,
+ 880      ) -&gt; np.ndarray:
+ 881          &quot;&quot;&quot;按弧长比例取点：对 ``s(v) = Q(v)/(kπ)`` 二分反解出 ``v``，再代回 ``p(t)``。
+ 882  
+ 883          ``Q(v) = ∫₀^v √(d² + c²cos²u) du`` 用&quot;整周期解析 + 余项复合 Gauss-Legendre&quot;
+ 884          计算（见 :func:`_sinusoid_arc_integral`），避免 ``c ≫ d`` 时 ``|cos|`` 拐点
+ 885          带来的求积误差。
+ 886          &quot;&quot;&quot;
+ 887          chord_hat, _, distance = self._chord(A, B)
+ 888          amplitude = _as_scalar(parameter, &quot;parameter（正弦幅值 α）&quot;)
+ 889          plane = self._plane_direction(A, B)
+ 890          fractions = np.asarray(fractions, dtype=np.float64).reshape(-1)
+ 891          k = self.k
+ 892          c = amplitude * k * np.pi
+ 893          v_max = float(k) * np.pi
+ 894          total = self._arc_length_of(distance, c)
+ 895          if not total &gt; 0.0:
+ 896              raise ShapeDegenerateError(
+ 897                  f&quot;正弦曲线弧长非正（S = {total:.6g}），无法按弧长采样&quot;,
+ 898                  &quot;检查幅值与端点是否合法，或改用其它形状族&quot;,
+ 899              )
+ 900  
+ 901          def cumulative(v: float) -&gt; float:
+ 902              return _sinusoid_arc_integral(distance, c, v) / v_max
+ 903  
+ 904          v = np.empty_like(fractions)
+ 905          for index, fraction in enumerate(fractions):
+ 906              if fraction &lt;= 0.0:
+ 907                  v[index] = 0.0
+ 908              elif fraction &gt;= 1.0:
+ 909                  v[index] = v_max
+ 910              else:
+ 911                  v[index] = _bisect_increasing(cumulative, 0.0, v_max, float(fraction) * total, iterations=64)
+ 912          t = v / v_max
+ 913          offset = (B - A)[None, :] * t[:, None]
+ 914          bulge = (amplitude * np.sin(np.pi * k * t))[:, None] * plane[None, :]
+ 915          return A[None, :] + offset + bulge
+</code></pre></details><details id="correction" class="answer"><summary>src/dhik/shapes.py · correct_to_bone_lengths · 第 1031 行</summary><pre><code>1031  def correct_to_bone_lengths(
+1032      points: np.ndarray,
+1033      lengths: np.ndarray,
+1034      A: np.ndarray,
+1035      B: np.ndarray,
+1036      max_iter: int = 200,
+1037      tol: float = 1e-12,
+1038      shape_projector: Optional[Callable[[np.ndarray], np.ndarray]] = None,
+1039      attraction: float = 0.5,
+1040  ) -&gt; CorrectionResult:
+1041      &quot;&quot;&quot;把等弧长采样得到的关节点修正到**严格满足离散骨长约束**。
+1042  
+1043      为什么需要它（课程点名的致命陷阱）
+1044      ----------------------------------
+1045      &quot;曲线弧长不等于相邻关节点间的直线距离&quot;：等弧长采样只保证相邻点之间的**弧长**
+1046      等于骨长，而约束要求的是**直线距离** ``‖p_{i+1} − p_i‖ = l_i``。曲线上两点间的
+1047      弦永远短于它们之间的弧，所以等弧长采样天然偏短（弯得越厉害偏得越多）。
+1048      本函数以采样结果为初始化，迭代拉回硬约束。
+1049  
+1050      算法（Gauss-Seidel 交替投影，FABRIK 式）
+1051      ----------------------------------------
+1052      每一轮做以下三步，返回前**最后一步一定是纯硬约束扫描**（吸引步只在
+1053      非最后一轮执行，且每轮都以一次硬投影收尾，因此返回构型永远严格满足骨长）：
+1054  
+1055      1. **前向**（保 ``A`` 固定）：``p_0 ← A``，逐段把 ``p_{i+1}`` 投到以 ``p_i`` 为心、
+1056         半径 ``l_i`` 的球面上——即沿当前方向重新量出 ``l_i``；
+1057      2. **形状吸引**（可选，仅当给出 ``shape_projector`` 且 ``attraction &gt; 0``）：
+1058         每个内点朝曲线最近点混一步 ``p ← (1 − w)·p + w·proj(p)``（形状是**软约束**，
+1059         这一步会破坏骨长，由下一步立刻修回）；该步只在**形状偏置阶段**执行
+1060         （前 ``min(20, max_iter // 2)`` 轮），让软约束决定解落在哪一支，
+1061         随后交给纯硬约束扫描收敛；
+1062      3. **后向**（保 ``B`` 固定）：``p_N ← B``，从末端反扫，同样按 ``l_i`` 重摆每段。
+1063  
+1064      由于每步都把段长写成半径投影，**任意中间构型的段长都精确等于 ``l_i``**
+1065      （只受浮点舍入影响），这正是&quot;骨长是硬约束、绝不静默改变骨长&quot;的体现；
+1066      收敛判据是端点误差与段长残差都进入 ``tol``。
+1067  
+1068      形状偏置阶段为什么要短（≤ 20 轮）而且必须收尾
+1069      ----------------------------------------------
+1070      若每轮都吸引，软约束会把构型持续推向曲线；当曲线本身接近直线时，构型会贴到
+1071      **共线流形**上——而共线方向正是投影扫描的不动流形（投影只沿线重排，不产生
+1072      横向弯曲），此时硬约束的收敛率退化到接近 1：实测端点误差长期停在 ``1e-2``
+1073      量级（须几万轮才收敛）。因此偏置只做一个短的前置阶段，之后全是纯硬约束；
+1074      这样既保住了形状偏置带来的解分支（形状偏差实测下降 3 成以上），又能把
+1075      端点误差压回机器精度。
+1076  
+1077      参数:
+1078          points: 形状 ``(N, 3)`` 的初始关节点（等弧长采样结果），``N = len(lengths) + 1``。
+1079          lengths: 形状 ``(N−1,)`` 的骨长，必须全为正。
+1080          A: 形状 ``(3,)`` 的起点（硬约束，逐轮钉住）。
+1081          B: 形状 ``(3,)`` 的终点（硬约束）。
+1082          max_iter: 最大扫描轮数（每轮 = 吸引 + 前向 + 后向）。
+1083          tol: 收敛容差（端点误差与段长残差同时满足）。
+1084          shape_projector: 可选的可调用对象，接收 ``(M, 3)`` 的内点数组并返回其
+1085              在曲线上的最近点 ``(M, 3)``；为 ``None`` 时不吸引、偏差字段为 ``None``。
+1086          attraction: 吸引步的混合系数 ``w ∈ [0, 1]``（0 等价于不吸引），
+1087              只在前 ``min(20, max_iter // 2)`` 轮生效（形状偏置阶段，见下方说明）。
+1088  
+1089      返回:
+1090          :class:`CorrectionResult`（含修正前后形状偏差对比）。
+1091  
+1092      异常:
+1093          ValueError: 输入形状/取值非法（骨长非正、端点形状错、``attraction`` 越界、
+1094              ``shape_projector`` 返回形状不符等）。**不可达（``‖B − A‖`` 小于骨链
+1095              最小可达半径）不抛异常**：如实通过 ``converged=False`` 与
+1096              ``endpoint_error &gt; 0`` 报告，骨长仍然精确。
+1097      &quot;&quot;&quot;
+1098      start = _as_point(A, &quot;A&quot;)
+1099      end = _as_point(B, &quot;B&quot;)
+1100      current = np.asarray(points, dtype=np.float64)
+1101      if current.ndim != 2 or current.shape[1] != 3:
+1102          raise ValueError(f&quot;points 形状必须为 (N, 3)，收到 {current.shape}&quot;)
+1103      if not bool(np.all(np.isfinite(current))):
+1104          raise ValueError(&quot;points 含 NaN 或无穷值&quot;)
+1105      bones = np.asarray(lengths, dtype=np.float64).reshape(-1)
+1106      if bones.size == 0:
+1107          raise ValueError(&quot;lengths 不能为空（至少 1 段骨）&quot;)
+1108      if current.shape[0] != bones.size + 1:
+1109          raise ValueError(
+1110              f&quot;points 的关节点数应等于骨数 + 1：收到 {current.shape[0]} 个点、{bones.size} 根骨&quot;
+1111          )
+1112      if not bool(np.all(np.isfinite(bones))) or bool(np.any(bones &lt;= 0.0)):
+1113          raise ValueError(f&quot;lengths 必须是有限正数，收到 {bones.tolist()}&quot;)
+1114      if not np.isfinite(float(bones.sum())):
+1115          # 防止骨长量级过大时逐段累加溢出成 Inf（宁可明确报错，也不静默产出 Inf）。
+1116          raise ValueError(f&quot;lengths 之和溢出（骨长量级过大），收到 {bones.tolist()}&quot;)
+1117      rounds = int(max_iter)
+1118      if rounds &lt; 1:
+1119          raise ValueError(f&quot;max_iter 必须 ≥ 1，收到 {max_iter!r}&quot;)
+1120      tolerance = _as_scalar(tol, &quot;tol&quot;)
+1121      if tolerance &lt;= 0.0:
+1122          raise ValueError(f&quot;tol 必须为正，收到 {tol!r}&quot;)
+1123      weight = _as_scalar(attraction, &quot;attraction&quot;)
+1124      if not 0.0 &lt;= weight &lt;= 1.0:
+1125          raise ValueError(f&quot;attraction 必须落在 [0, 1]，收到 {attraction!r}&quot;)
+1126      if shape_projector is not None and not callable(shape_projector):
+1127          raise TypeError(&quot;shape_projector 必须可调用（接收 (M, 3) 返回 (M, 3)）或为 None&quot;)
+1128  
+1129      num_bones = int(bones.size)
+1130      current = current.copy()
+1131      chord = end - start
+1132      chord_hat = _unit_or(chord, _deterministic_perpendicular(chord))
+1133      deviation_before = (
+1134          _shape_deviation(current, shape_projector) if shape_projector is not None else None
+1135      )
+1136  
+1137      def forward_sweep() -&gt; None:
+1138          &quot;&quot;&quot;前向：``A`` 固定，逐段把下一点投到以当前点为心、半径 ``l_i`` 的球面上。&quot;&quot;&quot;
+1139          current[0] = start
+1140          direction = chord_hat
+1141          for index in range(num_bones):
+1142              direction = _unit_or(current[index + 1] - current[index], direction)
+1143              current[index + 1] = current[index] + direction * bones[index]
+1144  
+1145      def backward_sweep() -&gt; None:
+1146          &quot;&quot;&quot;后向：``B`` 固定，从末端反扫恢复端点（FABRIK 式）。&quot;&quot;&quot;
+1147          current[-1] = end
+1148          direction = -chord_hat
+1149          for index in range(num_bones - 1, -1, -1):
+1150              direction = _unit_or(current[index] - current[index + 1], direction)
+1151              current[index] = current[index + 1] + direction * bones[index]
+1152  
+1153      def attract() -&gt; None:
+1154          &quot;&quot;&quot;形状吸引步（软约束）：内点朝曲线最近点混合 ``weight``。&quot;&quot;&quot;
+1155          if num_bones &lt; 2:
+1156              return
+1157          interior = current[1:-1]
+1158          projected = _project_points(shape_projector, interior)
+1159          current[1:-1] = interior + weight * (projected - interior)
+1160  
+1161      # 形状偏置阶段取前 min(20, max_iter//2) 轮：软约束负责把构型拉进&quot;贴合形状&quot;的
+1162      # 那一支，其后（含最后一轮）全是纯硬约束扫描，把端点误差收敛到 0。
+1163      # 偏置阶段不能太长：实测把构型拉到近共线流形后，硬约束扫描的收敛率会退化到
+1164      # 接近 1（共线方向是投影的不动流形），端点误差会长期停在 1e-2 量级上不去。
+1165      bias_rounds = min(20, max(1, rounds // 2))
+1166      iterations = 0
+1167      converged = False
+1168      for round_index in range(1, rounds + 1):
+1169          iterations = round_index
+1170          # 最后一轮不吸引：返回前必有一次纯硬约束扫描收尾。
+1171          if (
+1172              shape_projector is not None
+1173              and weight &gt; 0.0
+1174              and round_index &lt;= bias_rounds
+1175              and round_index &lt; rounds
+1176          ):
+1177              attract()
+1178          forward_sweep()
+1179          backward_sweep()
+1180          endpoint_error = _endpoint_error(current, start, end)
+1181          residual = _max_segment_residual(current, bones)
+1182          if endpoint_error &lt;= tolerance and residual &lt;= tolerance:
+1183              converged = True
+1184              break
+1185  
+1186      endpoint_error = _endpoint_error(current, start, end)
+1187      residual = _max_segment_residual(current, bones)
+1188      deviation_after = (
+1189          _shape_deviation(current, shape_projector) if shape_projector is not None else None
+1190      )
+1191      return CorrectionResult(
+1192          points=current,
+1193          iterations=iterations,
+1194          converged=converged,
+1195          endpoint_error=endpoint_error,
+1196          max_segment_residual=residual,
+1197          shape_deviation_before=deviation_before,
+1198          shape_deviation_after=deviation_after,
+1199      )
+</code></pre></details><details id="projector" class="answer"><summary>src/dhik/solvers/shape.py · _CurveProjector.__call__ · 第 556 行</summary><pre><code> 556      def __call__(self, points: np.ndarray) -&gt; np.ndarray:
+ 557          query = np.asarray(points, dtype=np.float64)
+ 558          if query.size == 0:
+ 559              return query.copy()
+ 560          starts = self._polyline[:-1]
+ 561          segments = self._polyline[1:] - starts
+ 562          length_squared = np.einsum(&quot;ij,ij-&gt;i&quot;, segments, segments)
+ 563          relative = query[:, None, :] - starts[None, :, :]
+ 564          projection = np.einsum(&quot;mij,ij-&gt;mi&quot;, relative, segments)
+ 565          safe = np.where(length_squared &gt; 0.0, length_squared, 1.0)
+ 566          ratio = np.clip(projection / safe[None, :], 0.0, 1.0)
+ 567          candidates = starts[None, :, :] + ratio[:, :, None] * segments[None, :, :]
+ 568          distances = np.linalg.norm(query[:, None, :] - candidates, axis=2)
+ 569          nearest = np.argmin(distances, axis=1)
+ 570          return candidates[np.arange(query.shape[0]), nearest]
+</code></pre></details><details id="standard" class="answer"><summary>src/dhik/shapes_helix.py · HelixShape.solve_parameter · 第 251 行</summary><pre><code> 251      def solve_parameter(self, chord: float, total_length: float, **control: Any) -&gt; HelixParameter:
+ 252          &quot;&quot;&quot;由弦长 ``d`` 与目标弧长 ``L`` 解出标准或广义螺旋参数。
+ 253  
+ 254          标准版：螺距显式解，半径解析解。广义版：显式解平均螺距，
+ 255          再在非负半径域内二分求平均半径；还须满足 |Δr| &lt;= d、L &gt;= S_min。
+ 256  
+ 257          参数:
+ 258              chord: 弦长 ``d = ‖B − A‖``。
+ 259              total_length: 目标弧长 ``L``（取骨链总长）。
+ 260              **control: 认 ``turns``（覆盖实例圈数，须与实例一致）、``sign``、
+ 261                  ``lengths``（骨长序列，用于内不可达判定）；``taper_radius`` /
+ 262                  ``taper_pitch`` 覆盖本次半径和螺距的线性变化量。
+ 263  
+ 264          返回:
+ 265              :class:`HelixParameter`。
+ 266  
+ 267          异常:
+ 268              ShapeDegenerateError: ``d ≈ 0`` / ``L ≤ d`` / ``L ≈ d`` / ``d &lt; r_min``。
+ 269              ValueError: 圈数非正整数、非有限 taper、控制量与实例不一致等。
+ 270          &quot;&quot;&quot;
+ 271          distance, total = self._validate_inputs(chord, total_length, dict(control))
+ 272          turns = self._resolve_turns(control)
+ 273          sign = self._resolve_sign(control)
+ 274          dr = _finite(control.get(&quot;taper_radius&quot;, self.taper_radius), &quot;taper_radius&quot;)
+ 275          dp = _finite(control.get(&quot;taper_pitch&quot;, self.taper_pitch), &quot;taper_pitch&quot;)
+ 276          if dr != 0.0 or dp != 0.0:
+ 277              return self._solve_general(distance, total, turns, sign, dr, dp)
+ 278          pbar = sign * distance / float(turns)
+ 279          inner = (total / float(turns)) ** 2 - pbar * pbar
+ 280          if inner &lt;= 0.0:
+ 281              # L &gt; d 已由 _validate_inputs 保证，这里只是数值兜底。
+ 282              raise ShapeDegenerateError(
+ 283                  f&quot;标准 helix 在 N = {turns} 下需要 L/N &gt; |p̄| = {abs(pbar):.6g}，&quot;
+ 284                  f&quot;当前 L/N = {total / float(turns):.6g} 不满足&quot;,
+ 285                  &quot;增大骨长或减小弦长；或降低圈数 N&quot;,
+ 286              )
+ 287          radius = float(np.sqrt(inner) / (2.0 * np.pi))
+ 288          if not np.isfinite(radius):
+ 289              raise ShapeDegenerateError(
+ 290                  f&quot;解出的半径非有限（L = {total:.6g}、d = {distance:.6g}、N = {turns}）&quot;,
+ 291                  &quot;检查输入量级，或换用其它形状族&quot;,
+ 292              )
+ 293          return HelixParameter(r0=radius, r1=radius, p0=pbar, p1=pbar, turns=float(turns))
+</code></pre></details><details id="general" class="answer"><summary>src/dhik/shapes_helix.py · HelixShape._solve_general · 第 448 行</summary><pre><code> 448      def _solve_general(self, distance, total, turns, sign, dr, dp):
+ 449          &quot;&quot;&quot;先解弦长，再在 r_bar &gt;= |dr|/2 的单调区间二分。&quot;&quot;&quot;
+ 450          if abs(dr) &gt; distance:
+ 451              raise ShapeDegenerateError(&quot;半径变化量超过端点距离，当前螺旋形状无解&quot;, &quot;减小 taper_radius&quot;)
+ 452          # 避免 d**2 - dr**2 的相减损失。
+ 453          pbar = sign * np.sqrt((distance - abs(dr)) * (distance + abs(dr))) / turns
+ 454          p0, p1 = pbar - 0.5 * dp, pbar + 0.5 * dp
+ 455          low = 0.5 * abs(dr)
+ 456          def length(radius):
+ 457              return _arc_length_closed(radius - 0.5 * dr, radius + 0.5 * dr, p0, p1, turns)
+ 458          minimum = length(low)
+ 459          tolerance = 1e-12 * max(1.0, total)
+ 460          if minimum &gt; total + tolerance:
+ 461              raise ShapeDegenerateError(&quot;该锥度的最短曲线仍超过骨链总长&quot;, &quot;减小 taper 或增大骨链总长&quot;)
+ 462          if abs(minimum - total) &lt;= tolerance:
+ 463              radius = low
+ 464          else:
+ 465              high = max(total, low + total)
+ 466              if length(high) &lt; total:
+ 467                  raise ShapeDegenerateError(&quot;无法建立有限求根区间&quot;, &quot;检查参数量级&quot;)
+ 468              for _ in range(60):
+ 469                  mid = 0.5 * (low + high)
+ 470                  if length(mid) &lt; total:
+ 471                      low = mid
+ 472                  else:
+ 473                      high = mid
+ 474                  if high - low &lt;= 1e-13 * max(1.0, total):
+ 475                      break
+ 476              radius = 0.5 * (low + high)
+ 477          return HelixParameter(max(0.0, radius - 0.5 * dr), max(0.0, radius + 0.5 * dr),
+ 478                                p0, p1, float(turns))
+</code></pre></details><details id="arc-at" class="answer"><summary>src/dhik/shapes_helix.py · _arc_at · 第 157 行</summary><pre><code> 157  def _arc_at(r0: float, r1: float, p0: float, p1: float, turns: float, u: float) -&gt; float:
+ 158      &quot;&quot;&quot;累计弧长：标准版解析，广义版复合 Gauss-Legendre 积分。&quot;&quot;&quot;
+ 159      if r0 == r1 and p0 == p1:
+ 160          return float(np.hypot(2.0 * np.pi * turns * r0, turns * p0) * u)
+ 161      t = float(u) * _ARC_U
+ 162      dr, dp = r1 - r0, p1 - p0
+ 163      speed = np.sqrt(dr * dr + (2.0 * np.pi * turns * (r0 + dr * t)) ** 2
+ 164                      + (turns * (p0 + dp * t)) ** 2)
+ 165      return float(u) * float(np.dot(_ARC_W, speed))
+</code></pre></details><details id="rotation" class="answer"><summary>src/dhik/solvers/base.py · IKSolver.recover_local_rotations · 第 386 行</summary><pre><code> 386      @staticmethod
+ 387      def recover_local_rotations(
+ 388          skeleton: Skeleton,
+ 389          chain_indices: Sequence[int],
+ 390          chain_positions: np.ndarray,
+ 391          root_transform: Optional[Transform] = None,
+ 392      ) -&gt; np.ndarray:
+ 393          &quot;&quot;&quot;由骨链关节的**世界位置**恢复**局部关节旋转向量**（位置 → 旋转）。
+ 394  
+ 395          项目要求&quot;求解结果必须恢复为局部关节旋转，再通过 FK 重建骨架&quot;，本函数就是
+ 396          这条要求的公共实现：迭代型/形状型求解器算出关节点位置后调用它，解析型
+ 397          求解器推导出关节点位置后同样调用它，从而两类方法口径一致。
+ 398  
+ 399          推导（FK 递推 ``p_child = p_parent + R_parent · t_child^rest``）：
+ 400  
+ 401          对链上相邻的父子关节 ``(i, j)``，有 ``R_i · t_j^rest = p_j − p_i``。
+ 402          已知 ``R_i = R_parent(i) · R(θ_i)``，于是
+ 403  
+ 404          .. math::
+ 405  
+ 406              R(θ_i) \\, t_j^{rest} = \\big(R_{parent(i)}\\big)^{T} (p_j - p_i)
+ 407  
+ 408          右边只依赖已求出的父朝向与两点位置，问题化为&quot;把一个已知方向旋到另一个
+ 409          已知方向&quot;，用 :func:`minimal_rotation_vector`（最短弧）解出 ``θ_i``。
+ 410          沿链从根到末端一次扫描即可，**骨长自动保持**（旋转不改变 ``t_j^rest`` 的模长）。
+ 411  
+ 412          扭转自由度口径：每个关节只约束&quot;骨轴指向&quot;，绕骨轴的自转是自由的；这里统一
+ 413          取**最短弧**（不引入额外轴向扭转），使同一位置序列永远给出同一组关节角。
+ 414          不在链上的关节（含末端关节自身）局部旋转保持为零。
+ 415  
+ 416          参数:
+ 417              skeleton: 骨架。
+ 418              chain_indices: 骨链关节下标序列（根 → 末端，拓扑序，必须从骨架根关节开始）。
+ 419              chain_positions: 形状 ``(len(chain_indices), 3)`` 的各关节世界位置。
+ 420              root_transform: 施加在根关节上的世界变换（决定链根的父朝向）。
+ 421  
+ 422          返回:
+ 423              形状 ``(N, 3)`` 的局部关节旋转向量。
+ 424  
+ 425          异常:
+ 426              ValueError: 下标序列为空、不以骨架根关节开头、长度或位置形状不匹配，
+ 427                  或相邻关节点重合（方向未定义）。
+ 428          &quot;&quot;&quot;
+ 429          indices = [int(i) for i in chain_indices]
+ 430          if not indices:
+ 431              raise ValueError(&quot;chain_indices 不能为空&quot;)
+ 432          if indices[0] != skeleton.root_index:
+ 433              raise ValueError(
+ 434                  &quot;chain_indices 必须从骨架根关节开始（根 → 末端），&quot;
+ 435                  f&quot;收到起点下标 {indices[0]}，根关节下标为 {skeleton.root_index}&quot;
+ 436              )
+ 437          positions = np.asarray(chain_positions, dtype=np.float64)
+ 438          if positions.shape != (len(indices), 3):
+ 439              raise ValueError(
+ 440                  f&quot;chain_positions 形状必须为 ({len(indices)}, 3)，收到 {positions.shape}&quot;
+ 441              )
+ 442          if not np.all(np.isfinite(positions)):
+ 443              raise ValueError(&quot;chain_positions 包含 NaN 或无穷值&quot;)
+ 444  
+ 445          root = Transform.identity() if root_transform is None else root_transform
+ 446          local_rotations = np.zeros((skeleton.num_joints, 3), dtype=np.float64)
+ 447          # accumulated = 链根关节**父级**的世界朝向（之后逐关节右乘自身旋转）。
+ 448          accumulated = root.rotation.copy()
+ 449          for offset in range(len(indices) - 1):
+ 450              parent = indices[offset]
+ 451              child = indices[offset + 1]
+ 452              bone_vector = positions[offset + 1] - positions[offset]
+ 453              rest_offset = skeleton.rest_offset_of(child)
+ 454              # accumulated^T · bone_vector 就是 bone_vector 在父关节坐标系下的表达。
+ 455              target_in_parent = accumulated.T @ bone_vector
+ 456              # 先用最短弧给出&quot;把该段骨转过去&quot;的相对旋转，再经 rotation.py 的
+ 457              # &quot;旋转矩阵 → 旋转向量&quot;（Shepperd 分支，θ ∈ [0, π] 规范形式）取回关节角，
+ 458              # 保证扭转自由度口径与 FK/旋转模块完全一致。
+ 459              relative_matrix = rotation_vector_to_matrix(
+ 460                  minimal_rotation_vector(rest_offset, target_in_parent)
+ 461              )
+ 462              local_rotations[parent] = matrix_to_rotation_vector(relative_matrix)
+ 463              accumulated = accumulated @ relative_matrix
+ 464          return local_rotations
+</code></pre></details></main></body></html>
